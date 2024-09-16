@@ -1,0 +1,27 @@
+http:
+  routers:
+    webrouter:
+      rule: "host(`localhost`)"
+      middlewares:
+        - test-retry
+      service: webservice
+      entryPoints:
+        - web
+  middlewares:
+    test-retry:
+      retry:
+        attempts: 4
+        initialInterval: 200ms
+  services:
+    # Define how to reach an existing service on our infrastructure
+    webservice:
+      loadBalancer:
+        servers:
+          # service URL start
+          # service URL end
+        healthCheck:
+          path: /health
+          port: 3000
+          interval: 10s
+          timeout: 1s
+

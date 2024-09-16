@@ -1,0 +1,23 @@
+services:
+  traefik:
+    container_name: traefik_contain
+    platform: linux/amd64
+    image: traefik:v3.1.2
+    labels:
+      - "traefik.http.routers.api.rule=Host(`dashboard.com`)"
+      - "traefik.http.routers.api.service=api@internal"
+    networks:
+      - webgateway
+    ports:
+      - "80:80"
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/traefik.yml
+      - ./conf:/app/conf
+    restart: unless-stopped
+
+networks:
+  webgateway:
+    name: "zero-downtime_webgateway"
+    driver: bridge

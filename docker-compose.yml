@@ -1,0 +1,22 @@
+services:
+  web-blue: &web
+    container_name: web-blue
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    volumes: 
+      - .:/usr/src/app
+    networks:
+      - traefik
+    environment:
+      - CONTAIN_NAME=web-blue
+  web-green:
+    <<: *web
+    container_name: web-green
+    environment:
+      - CONTAIN_NAME=web-green
+networks:
+  traefik:
+    name: zero-downtime_webgateway
+    external: true
